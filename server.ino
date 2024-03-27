@@ -43,6 +43,8 @@ struct ClientData {
   double humidity;
 };
 
+String selectedCity;
+
 struct ClientData clientData;
 
 void setup() {
@@ -126,6 +128,7 @@ void loop(){
             // CSS to style the on/off buttons 
             // Feel free to change the background-color and font-size attributes to fit your preferences
             client.println("<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}");
+            client.println(".center {margin-left: auto; margin-right: auto}");
             client.println(".button { background-color: #4CAF50; border: none; color: white; padding: 16px 40px;");
             client.println("text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}");
             client.println(".button2 {background-color: #555555;}</style></head>");
@@ -140,17 +143,24 @@ void loop(){
             client.println("<option value='Izmir' selected>Izmir</option>");
             client.println("</select>");
 
+            client.println("<p>");
+            client.println("<table class='center'>");
+            client.println("<tr>");
+            client.println("<th>Temperature</th>");
+            client.println("<th>"+String(clientData.temp)+"</th>");
+            client.println("</tr>");
+            client.println("<tr>");
+            client.println("<th>Humidity</th>");
+            client.println("<th>"+String(clientData.humidity)+"</th>");
+            client.println("</tr>");
+            client.println("</table>");
+            client.println("</p>");
+
             // Display current state, and ON/OFF buttons for GPIO 2  
             client.println("<p>GPIO 2 - State " + output2State + "</p>");
             // If the output2State is off, it displays the ON button       
             if (output2State=="off") {
               client.println("<p><a href=\"/2/on\"><button class=\"button\">ON</button></a></p>");
-              client.println("<p>");
-              client.println("<table>");
-              client.println(clientData.temp);
-              client.println(clientData.humidity);
-              client.println("</table>");
-              client.println("</p>");
             } else {
               client.println("<p><a href=\"/2/off\"><button class=\"button button2\">OFF</button></a></p>");
             } 
