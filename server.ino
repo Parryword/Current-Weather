@@ -7,13 +7,14 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
+using namespace std; 
 
 const char* wifi_network_ssid = "Ekonet-Student";
 const char* wifi_network_password = "";
 
 // Replace with your network credentials
 const char* soft_ap_ssid     = "ESP32-Access-Point Efe";
-const char* soft_ap_password = "123456789";
+const char* soft_ap_password = "123456";
 int channel = 1;
 int ssid_hidden = 0;
 int max_connection = 9;
@@ -134,7 +135,7 @@ void loop(){
             client.println(".button2 {background-color: #555555;}</style></head>");
             
             // Web Page Heading
-            client.println("<body><h1>ESP32 Web Server by Efe</h1>");
+            client.println("<body><h1>Weather</h1>");
             client.println("<select name='city' id='city' />");
             client.println("<option value='Adana'>Adana</option>");
             client.println("<option value='Ankara'>Ankara</option>");
@@ -147,11 +148,11 @@ void loop(){
             client.println("<table class='center'>");
             client.println("<tr>");
             client.println("<th>"+imageTemp+"</th>");
-            client.println("<th>"+String(clientData.temp)+"</th>");
+            client.println("<th>"+getTermperature()+"</th>");
             client.println("</tr>");
             client.println("<tr>");
             client.println("<th>"+imageHumid+"</th>");
-            client.println("<th>"+String(clientData.humidity)+"</th>");
+            client.println("<th>"+String(clientData.humidity)+"%</th>");
             client.println("</tr>");
             client.println("</table>");
             client.println("</p>");
@@ -242,4 +243,9 @@ void weatherRequest() {
     else {
       Serial.println("WiFi Disconnected");
     }
+}
+
+String getTermperature() {
+  double celcius = clientData.temp - 273;
+  return String(celcius) + "\xB0""C";
 }
