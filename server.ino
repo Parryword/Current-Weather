@@ -6,6 +6,7 @@
 // Load Wi-Fi library
 #include <WiFi.h>
 #include <HTTPClient.h>
+#include <ArduinoJson.h>
 
 const char* wifi_network_ssid = "Ekonet-Student";
 const char* wifi_network_password = "";
@@ -13,6 +14,10 @@ const char* wifi_network_password = "";
 // Replace with your network credentials
 const char* soft_ap_ssid     = "ESP32-Access-Point Efe";
 const char* soft_ap_password = "123456789";
+int channel = 1;
+int ssid_hidden = 0;
+int max_connection = 9;
+bool ftm_responder = false;
 
 // Set web server port number to 80
 WiFiServer server(80);
@@ -26,13 +31,19 @@ String output27State = "off";
 
 //Your Domain name with URL path or IP address with path
 String serverName1 = "https://api.weatherapi.com/v1/current.json?q=Izmir&key=1434b792f69942ddb51201230242303";
-String serverName2 = "https://api.openweathermap.org/data/2.5/forecast?appid=660aad8d134eb678f8445709216b8361&lat=0&lon=0";
+String serverName2 = "https://api.openweathermap.org/data/2.5/weather?q=Izmir&appid=660aad8d134eb678f8445709216b8361";
 
 // Assign output variables to GPIO pins
 const int output2 = 2;
 const int output27 = 27;
 
-String weatherData;
+// Weather data
+struct ClientData {
+  double temp;
+  double humidity;
+};
+
+struct ClientData clientData;
 
 void setup() {
   Serial.begin(115200);
@@ -46,7 +57,7 @@ void setup() {
   Serial.print("Setting AP (Access Point)…");
   // Remove the password parameter, if you want the AP (Access Point) to be open
   WiFi.mode(WIFI_AP_STA);
-  WiFi.softAP(soft_ap_ssid, soft_ap_password);
+  WiFi.softAP(soft_ap_ssid, soft_ap_password, channel, ssid_hidden, max_connection, ftm_responder);
 
   IPAddress IP = WiFi.softAPIP();
   Serial.print("AP IP address: ");
@@ -134,7 +145,12 @@ void loop(){
             // If the output2State is off, it displays the ON button       
             if (output2State=="off") {
               client.println("<p><a href=\"/2/on\"><button class=\"button\">ON</button></a></p>");
-              client.println("<p>" + weatherData + "</p>");
+              client.println("<p>");
+              client.println("<table>");
+              client.println(clientData.temp);
+              client.println(clientData.humidity);
+              client.println("</table>");
+              client.println("</p>");
             } else {
               client.println("<p><a href=\"/2/off\"><button class=\"button button2\">OFF</button></a></p>");
             } 
@@ -193,7 +209,18 @@ void weatherRequest() {
         Serial.println(httpResponseCode);
         String payload = http.getString();
         Serial.println(payload);
-        weatherData = payload;
+        JsonDocument doc;
+        DeserializationError error = deserializeJson(doc, payload);
+        if (error) {
+          Serial.println("deserializeJson() failed");
+          return;
+        }
+        double temp = doc["main"]["temp"];
+        double humidity = doc["main"]["humidity"];
+        clientData.temp = temp;
+        clientData.humidity = humidity;
+        Serial.println(clientData.temp);
+        Serial.println(clientData.humidity);
       }
       else {
         Serial.print("Error code: ");
