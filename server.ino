@@ -151,14 +151,14 @@ void loop(){
             client.println(".button2 {background-color: #4b6584;}</style></head>");
             
             // Web Page Heading
-            client.println("<body style='background-color: #d1d8e0;'><h1>Current Weather</h1>");
+            client.println("<body style=''><h1>Current Weather</h1>");
             client.println("<script>function setCity() {const $select = document.getElementById('city'); const cityName = $select.value; document.getElementById('query').href = '?q=' + cityName;}</script>");
             
 
             client.println("<p>");
             client.println("<table class='center'>");
             client.println("<tr>");
-            client.println("<td colspan='2'><select class='form-select' name='city' id='city'/>");
+            client.println("<td colspan='2' style='padding-bottom: 1em'><select class='form-select' name='city' id='city'/>");
             client.println("<option value='Adana'>Adana</option>");
             client.println("<option value='Ankara'>Ankara</option>");
             client.println("<option value='Antalya'>Antalya</option>");
@@ -182,7 +182,7 @@ void loop(){
             client.println("</p>");
 
             client.println("<p><a id='query' href='/?q'><button onclick='setCity()' class=\"button\">UPDATE</button></a></p>");
-
+/*
             // Display current state, and ON/OFF buttons for GPIO 2  
             client.println("<p>GPIO 2 - State " + output2State + "</p>");
             // If the output2State is off, it displays the ON button       
@@ -200,6 +200,7 @@ void loop(){
             } else {
               client.println("<p><a href=\"/27/off\"><button class=\"button button2\">OFF</button></a></p>");
             }
+            */
             client.println("<script>function setSelect() {const $select = document.getElementById('city'); const $options = Array.from($select.options); const optionToSelect = $options.find(item => item.text === '" + selectedCity + "'); optionToSelect.selected = true;} setSelect();</script>");
             client.println("</body></html>");
             
