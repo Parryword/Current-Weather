@@ -1,2 +1,10 @@
-<img src="https://github.com/Parryword/ESP32-Web-Server/assets/101982505/fb56c2f8-04d8-4892-aecc-051204a45bf3 height=100px">
-<img src="https://github.com/Parryword/ESP32-Web-Server/assets/101982505/28cf1d01-a283-48b8-830c-5ad91619e111 height=100px">
+<table>
+  <tr>
+    <td>
+      <img src="https://github.com/Parryword/ESP32-Web-Server/assets/101982505/7dea88e0-f605-4061-9750-d08fd72fc236" height="100"/>
+    </td>
+  </tr>
+    <td>
+      <img src="https://github.com/Parryword/ESP32-Web-Server/assets/101982505/0ca20fb9-9500-4f5c-aa20-dd7ec79abe9" height="100"/>
+    </td>
+</table>
